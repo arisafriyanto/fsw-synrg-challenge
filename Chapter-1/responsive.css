@@ -1,0 +1,156 @@
+@media only screen and (max-width: 600px) {
+  #hero {
+    height: 657px;
+  }
+
+  .hero-content {
+    padding-top: 32px;
+  }
+
+  .hero-image img {
+    position: static;
+    padding-top: 24px;
+  }
+
+  .hero-content h1 {
+    margin-bottom: 1rem;
+  }
+
+  #our-services {
+    width: 100%;
+    margin: 60px 0;
+  }
+
+  .image-service {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .image-service img {
+    width: 70%;
+  }
+
+  .desc-service {
+    padding-left: 0;
+  }
+
+  .content-title {
+    text-align: center;
+  }
+
+  .content-description {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  #why-us {
+    padding-bottom: 60px;
+  }
+
+  #why-us .card {
+    margin-bottom: 16px;
+  }
+
+  .testimony-card {
+    width: 100%;
+    height: 372px;
+    /* border-radius: 8px;
+    background: #f1f3ff;
+    margin: 0 auto; */
+  }
+
+  .testimony-photo {
+    text-align: center;
+  }
+
+  .testimony-content img {
+    padding: 24px 0;
+  }
+
+  .testimony-content {
+    padding: 0;
+    text-align: center;
+  }
+
+  .testimony-body {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .testimony-footer {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .testimony-layout {
+    display: block !important;
+    margin: 40px 32px;
+  }
+
+  .carousel-control-next {
+    padding-right: 0 !important;
+    padding-left: 22px !important;
+  }
+  .carousel-control-prev {
+    padding-left: 0 !important;
+    padding-right: 22px !important;
+  }
+
+  #cta {
+    padding-bottom: 60px;
+  }
+
+  #cta .card {
+    height: 400px;
+  }
+
+  #cta .card-content h2 {
+    font-size: 24px;
+    line-height: 36px;
+    /* font-weight: 700; */
+  }
+
+  #cta .card-content p {
+    width: 100%;
+  }
+
+  .card-content {
+    /* font-size: 14px; */
+    width: 212px;
+    /* font-weight: 300; */
+  }
+
+  #faq {
+    padding-bottom: 60px;
+  }
+
+  #faq .accordion {
+    padding-top: 24px;
+  }
+
+  #faq h4 {
+    font-size: 24px;
+  }
+
+  .accordion-button,
+  .accordion-body {
+    font-size: 14px;
+  }
+
+  .footer-navbar {
+    justify-content: start !important;
+  }
+
+  .footer-navbar,
+  .footer-social {
+    margin-bottom: 16px;
+  }
+
+  footer {
+    padding-bottom: 60px;
+  }
+
+  .footer-social {
+    padding-left: 0;
+  }
+}

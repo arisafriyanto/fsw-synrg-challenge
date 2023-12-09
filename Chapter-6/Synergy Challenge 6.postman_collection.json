@@ -1,0 +1,407 @@
+{
+	"info": {
+		"_postman_id": "aff414fe-b79d-451f-8457-7eb8a6ad2e22",
+		"name": "Synergy Challenge 6",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13002679"
+	},
+	"item": [
+		{
+			"name": "Getting All Car",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQwNSRXRkY5WTh0WVZoaGpXblVIcjB1OEJPNEN4Y05IR0VlN1Y2YlllbS5jLlZTZG43VmwwcG5FYSIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDIzLTExLTI0VDA3OjQzOjIwLjU3NFoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMS0yNFQwNzo0MzoyMC41NzRaIiwiaWF0IjoxNzAwODExODA4fQ.YZ8YhHRxCTF3_AzlVl48q2-3EIRpu2BJHbY8BcVz1J8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/cars?available=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"cars"
+					],
+					"query": [
+						{
+							"key": "available",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getting Car By Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQwNSRXRkY5WTh0WVZoaGpXblVIcjB1OEJPNEN4Y05IR0VlN1Y2YlllbS5jLlZTZG43VmwwcG5FYSIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDIzLTExLTI0VDA3OjQzOjIwLjU3NFoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMS0yNFQwNzo0MzoyMC41NzRaIiwiaWF0IjoxNzAwODExODA4fQ.YZ8YhHRxCTF3_AzlVl48q2-3EIRpu2BJHbY8BcVz1J8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/cars/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"cars",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Adding Car",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQwNSRXRkY5WTh0WVZoaGpXblVIcjB1OEJPNEN4Y05IR0VlN1Y2YlllbS5jLlZTZG43VmwwcG5FYSIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDIzLTExLTI0VDA3OjQzOjIwLjU3NFoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMS0yNFQwNzo0MzoyMC41NzRaIiwiaWF0IjoxNzAwODExODA4fQ.YZ8YhHRxCTF3_AzlVl48q2-3EIRpu2BJHbY8BcVz1J8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Toyota",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "250000",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/home/afriyan/Documents/Book Cover Example/cover-book-2.jpg"
+						},
+						{
+							"key": "start_rent",
+							"value": "2023-11-28",
+							"type": "text"
+						},
+						{
+							"key": "finish_rent",
+							"value": "2023-11-25",
+							"type": "text"
+						},
+						{
+							"key": "available",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/cars",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Car by Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQwNSRXRkY5WTh0WVZoaGpXblVIcjB1OEJPNEN4Y05IR0VlN1Y2YlllbS5jLlZTZG43VmwwcG5FYSIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDIzLTExLTI0VDA3OjQzOjIwLjU3NFoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMS0yNFQwNzo0MzoyMC41NzRaIiwiaWF0IjoxNzAwODExODA4fQ.YZ8YhHRxCTF3_AzlVl48q2-3EIRpu2BJHbY8BcVz1J8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\n//     \"name\": \"Honda Jazz\",\n//     \"price\": 210000,\n//     \"photo\": \"honda-jazz.png\",\n//     \"start_rent\": \"2023-11-27\",\n//     \"finish_rent\": \"2023-11-29\"\n// }\n\n{\n    \"name\": \"Kuyy\",\n    \"price\": 200000,\n    \"photo\": \"yariss.png\",\n    \"start_rent\": \"2023-11-20\",\n    \"finish_rent\": \"2023-11-23\",\n    \"available\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/cars/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"cars",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Book by Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQwNSRXRkY5WTh0WVZoaGpXblVIcjB1OEJPNEN4Y05IR0VlN1Y2YlllbS5jLlZTZG43VmwwcG5FYSIsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDIzLTExLTI0VDA3OjQzOjIwLjU3NFoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMS0yNFQwNzo0MzoyMC41NzRaIiwiaWF0IjoxNzAwODExODA4fQ.YZ8YhHRxCTF3_AzlVl48q2-3EIRpu2BJHbY8BcVz1J8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/cars/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"cars",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Super",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"superfranky\",\n    \"password\": \"superfranky\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Admin by Super Admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzdXBlcmZyYW5reSIsImVtYWlsIjoic3VwZXJmcmFua3lAcmVudGFsLWNhcnMuY29tIiwicGFzc3dvcmQiOiIkMmIkMDUkcWFTRWhZRC53NzRjd1VvZWR3LjdIT2RlLjhnSzEzWjJaN1p3QVBONVl2dlc5QjVydHdhZEciLCJyb2xlIjoic3VwZXJhZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDIzLTExLTI0VDA2OjUzOjM3LjgwM1oiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMS0yNFQwNjo1MzozNy44MDNaIiwiaWF0IjoxNzAwODA4ODUzfQ.RlcAB1wcIVGl3h8xGSL41EDgPLNQY07ncwn56DRhzww",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"admin1\",\n  \"email\": \"admin1@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/auth/register-admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"register-admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Member",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"member1\",\n  \"password\": \"member1\",\n  \"email\": \"member1@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Admin",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin1\",\n    \"password\": \"admin1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Member",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"member1\",\n  \"password\": \"member1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Current User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzdXBlcmZyYW5reSIsImVtYWlsIjoic3VwZXJmcmFua3lAcmVudGFsLWNhcnMuY29tIiwicGFzc3dvcmQiOiIkMmIkMDUkOE9XNHZndGJjSU84V1pLclcwaHdRdUlqUTFaVGp3MS9JLnowVm00UTNybzdINGh5ajNqS0ciLCJyb2xlIjoic3VwZXJhZG1pbiIsImNyZWF0ZWRfYXQiOiIyMDIzLTExLTI0VDA3OjI0OjQzLjczOVoiLCJ1cGRhdGVkX2F0IjoiMjAyMy0xMS0yNFQwNzoyNDo0My43MzlaIiwiaWF0IjoxNzAwODExMTA1fQ.ANs0SJLpv4vLpkGwelbgE0uhQAAW5q5uKHYaWG2Mzm0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/auth/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"auth",
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
