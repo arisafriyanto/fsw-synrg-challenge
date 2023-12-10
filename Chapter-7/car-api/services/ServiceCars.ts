@@ -1,52 +1,55 @@
-import { TParams } from "../interfaces/IRest";
-import Cars, { ICars } from "../models/Cars";
+import { ICars } from '../models/Cars';
+import { IUsers } from '../models/Users';
+import RepoCars, { IParams } from '../repositories/RepoCars';
 
 class ServiceCars {
-  constructor() {}
-  async list(params?: TParams) {
-    try {
-      const response = await Cars.list({ available: params?.available });
-      return response;
-    } catch (error) {
-      return error;
-    }
-  }
+    private _repoCar: RepoCars;
+    private _user: IUsers | undefined;
 
-  async show(id: string) {
-    try {
-      const response = await Cars.show(id);
-      return response;
-    } catch (error) {
-      return error;
+    constructor(repoCar: RepoCars) {
+        this._repoCar = repoCar;
     }
-  }
 
-  async create(payload: ICars) {
-    try {
-      const response = await Cars.create(payload);
-      return response;
-    } catch (error) {
-      return error;
+    async list(params?: IParams) {
+        const cars = await this._repoCar.list(params);
+        return cars;
     }
-  }
 
-  async update(id: string, payload: ICars) {
-    try {
-      const response = await Cars.update(id, payload);
-      return response;
-    } catch (error) {
-      return error;
+    async show(id: string) {
+        const cars = await this._repoCar.show(id);
+        return cars;
     }
-  }
 
-  async remove(id: string, deleted_by: string) {
-    try {
-      const response = await Cars.remove(id, deleted_by);
-      return response;
-    } catch (error) {
-      return error;
+    async create(carData: ICars) {
+        const user = this.getUser as IUsers;
+        const cars = await this._repoCar.create(user, carData);
+        return cars;
     }
-  }
+
+    async update(id: string, carData: ICars) {
+        const user = this.getUser as IUsers;
+        const cars = await this._repoCar.update(user, id, carData);
+        return cars;
+    }
+
+    async remove(id: string) {
+        const user = this.getUser as IUsers;
+        const cars = await this._repoCar.remove(user, id);
+        return cars;
+    }
+
+    async count(params?: IParams) {
+        const result = await this._repoCar.count(params);
+        return result;
+    }
+
+    set setUser(userData: IUsers) {
+        this._user = userData;
+    }
+
+    get getUser() {
+        return this._user;
+    }
 }
 
-export default new ServiceCars();
+export default ServiceCars;

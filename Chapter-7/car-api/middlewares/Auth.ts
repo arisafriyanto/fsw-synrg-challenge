@@ -1,105 +1,100 @@
-import { Request, Response, NextFunction } from "express";
-import ServiceAuth from "../services/ServiceAuth";
-// import jwt from "jsonwebtoken";
-import { IUsers } from "../models/Users";
-declare module "express" {
-  interface Request {
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { IUsers } from '../models/Users';
+import { JWT_KEY } from '../services/ServiceAuth';
+
+export interface IRequestWithAuth extends Request {
     user?: IUsers;
-  }
 }
 
 class Auth {
-  constructor() {}
+    constructor() {}
 
-  async authorize(req: Request, res: Response, next: NextFunction) {
-    const headers = req.headers;
+    async authorize(req: IRequestWithAuth, res: Response, next: NextFunction) {
+        const headers = req.headers;
 
-    if (!headers.authorization) {
-      return res.status(403).json({
-        data: "not authorized",
-      });
+        if (!headers.authorization) {
+            return res.status(403).json({
+                data: 'not authorized',
+            });
+        }
+
+        try {
+            const bearerToken = `${headers.authorization}`.split('Bearer ');
+            const token = bearerToken[1];
+            const userData = jwt.verify(`${token}`, JWT_KEY) as IUsers;
+
+            const isSuperAdminOrAdmin =
+                userData.role === 'superadmin' || userData.role === 'admin' ? userData.role : false;
+
+            // console.log(isSuperAdminOrAdmin);
+
+            if (!isSuperAdminOrAdmin) {
+                return res.status(403).json({
+                    data: 'not authorized, only superadmin and admin role',
+                });
+            }
+
+            req.user = userData;
+            next();
+        } catch (error) {
+            res.status(401).json({
+                message: 'token does not match',
+            });
+        }
     }
 
-    try {
-      const bearerToken = `${headers.authorization}`.split("Bearer ");
-      const token = bearerToken[1];
-      const userData = await ServiceAuth.validateToken(token);
-      const role = userData.role === "superadmin" || userData.role === "admin" ? userData.role : "";
+    async authorizeSuperAdmin(req: IRequestWithAuth, res: Response, next: NextFunction) {
+        const headers = req.headers;
 
-      const isSuperAdminOrAdmin = await ServiceAuth.validateRole(userData, role);
-      // console.log(role);
+        if (!headers.authorization) {
+            return res.status(403).json({
+                data: 'not authorized',
+            });
+        }
 
-      if (!isSuperAdminOrAdmin) {
-        return res.status(403).json({
-          data: "not authorized",
-        });
-      }
+        try {
+            const bearerToken = `${headers.authorization}`.split('Bearer ');
+            const token = bearerToken[1];
+            const userData = jwt.verify(`${token}`, JWT_KEY) as IUsers;
 
-      (req as Request).user = userData;
+            if (!(userData.role === 'superadmin')) {
+                return res.status(403).json({
+                    data: 'not authorized, only superadmin role',
+                });
+            }
 
-      next();
-    } catch (error) {
-      res.status(401).json({
-        message: "token does not match",
-      });
-    }
-  }
-
-  async authorizeSuperAdmin(req: Request, res: Response, next: NextFunction) {
-    const headers = req.headers;
-
-    if (!headers.authorization) {
-      return res.status(403).json({
-        data: "not authorized",
-      });
+            req.user = userData;
+            next();
+        } catch (error) {
+            res.status(401).json({
+                message: 'token does not match',
+            });
+        }
     }
 
-    try {
-      const bearerToken = `${headers.authorization}`.split("Bearer ");
-      const token = bearerToken[1];
-      const userData = await ServiceAuth.validateToken(token);
+    async authorizeUser(req: IRequestWithAuth, res: Response, next: NextFunction) {
+        const headers = req.headers;
 
-      const isSuperAdmin = await ServiceAuth.validateRole(userData, "superadmin");
+        if (!headers.authorization) {
+            return res.status(403).json({
+                data: 'not authorized',
+            });
+        }
 
-      if (!isSuperAdmin) {
-        return res.status(403).json({
-          data: "not authorized",
-        });
-      }
+        try {
+            const bearerToken = `${headers.authorization}`.split('Bearer ');
+            const token = bearerToken[1];
+            const userData = jwt.verify(`${token}`, JWT_KEY) as IUsers;
 
-      (req as Request).user = userData;
-
-      next();
-    } catch (error) {
-      res.status(401).json({
-        message: "token does not match",
-      });
+            req.user = userData;
+            next();
+        } catch (error) {
+            res.status(401).json({
+                message: 'token does not match',
+            });
+        }
     }
-  }
-
-  async authorizeUser(req: Request, res: Response, next: NextFunction) {
-    const headers = req.headers;
-
-    if (!headers.authorization) {
-      return res.status(403).json({
-        data: "not authorized",
-      });
-    }
-
-    try {
-      const bearerToken = `${headers.authorization}`.split("Bearer ");
-      const token = bearerToken[1];
-      const userData = await ServiceAuth.validateToken(token);
-
-      (req as Request).user = userData;
-
-      next();
-    } catch (error) {
-      res.status(401).json({
-        message: "token does not match",
-      });
-    }
-  }
 }
 
-export default new Auth();
+export default Auth;

@@ -1,85 +1,98 @@
-import { Request, Response } from "express";
-import ServiceAuth, { TLoginPayload } from "../../services/ServiceAuth";
-import { IUsers } from "../../models/Users";
+import { NextFunction, Request, Response } from 'express';
+import ServiceAuth from '../../services/ServiceAuth';
+import ResponseBuilder from '../../utils/ResponseBuilder';
+import { IRequestWithAuth } from '../../middlewares/Auth';
+import { IUsers } from '../../models/Users';
 
 class ControllerAuth {
-  constructor() {}
-  async login(req: Request, res: Response) {
-    const payload: TLoginPayload = {
-      username: req.body.username,
-      password: req.body.password,
-    };
+    private _serviceAuth: ServiceAuth;
 
-    try {
-      const response = await ServiceAuth.login(payload);
-      if (!response.success) {
-        return res.status(403).json({
-          data: response.data,
-        });
-      }
-      const token = ServiceAuth.generateToken(response.data as IUsers);
-
-      res.status(200).json({
-        data: { token },
-      });
-    } catch (error) {
-      res.status(500).json({
-        data: error,
-      });
+    constructor(serviceAuth: ServiceAuth) {
+        this._serviceAuth = serviceAuth;
     }
-  }
 
-  async registerAdmin(req: Request, res: Response) {
-    try {
-      await ServiceAuth.register({
-        email: req.body.email,
-        password: req.body.password,
-        role: "admin",
-        username: req.body.username,
-      });
-      res.status(201).json({
-        message: "create admin success",
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "failed create admin",
-      });
+    login() {
+        const auth = this._serviceAuth;
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const response = await auth.login({
+                    username: req.body.username,
+                    password: req.body.password,
+                });
+
+                return ResponseBuilder.response({
+                    res,
+                    code: 200,
+                    data: { token: response },
+                    message: 'login success',
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
     }
-  }
 
-  async registerMember(req: Request, res: Response) {
-    try {
-      await ServiceAuth.register({
-        email: req.body.email,
-        password: req.body.password,
-        role: "member",
-        username: req.body.username,
-      });
+    registerAdmin() {
+        const auth = this._serviceAuth;
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const response = await auth.register({
+                    email: req.body.email,
+                    password: req.body.password,
+                    role: 'admin',
+                    username: req.body.username,
+                });
 
-      res.status(201).json({
-        message: "create member success",
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "failed create member",
-      });
+                return ResponseBuilder.response({
+                    res,
+                    code: 201,
+                    data: response,
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
     }
-  }
 
-  async user(req: Request, res: Response) {
-    const id: any = (req as Request).user?.id;
-    try {
-      const response = await ServiceAuth.getUserById(id);
+    registerMember() {
+        const auth = this._serviceAuth;
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const response = await auth.register({
+                    email: req.body.email,
+                    password: req.body.password,
+                    role: 'member',
+                    username: req.body.username,
+                });
 
-      res.status(201).json({
-        data: response,
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "failed get user",
-      });
+                return ResponseBuilder.response({
+                    res,
+                    code: 201,
+                    data: response,
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
     }
-  }
+
+    user() {
+        const auth = this._serviceAuth;
+        return async (req: IRequestWithAuth, res: Response, next: NextFunction) => {
+            try {
+                const id: any = req.user?.id;
+                const response = await auth.getUserById(id);
+
+                return ResponseBuilder.response({
+                    res,
+                    code: 200,
+                    data: response,
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
+    }
 }
 
-export default new ControllerAuth();
+export default ControllerAuth;

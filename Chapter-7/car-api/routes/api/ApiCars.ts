@@ -1,22 +1,22 @@
-import { Router } from "express";
-import ControllerCars from "../../controllers/api/ControllerCars";
-import Auth from "../../middlewares/Auth";
-import Media from "../../config/media";
+import { Router } from 'express';
+import ControllerCars from '../../controllers/api/ControllerCars';
+import Auth from '../../middlewares/Auth';
+import Media from '../../config/media';
 
 class ApiBooks {
-  private router: Router;
-  constructor() {
-    this.router = Router();
-  }
-  routes() {
-    this.router.get("/", Auth.authorize, ControllerCars.list);
-    this.router.get("/:id", Auth.authorize, ControllerCars.show);
-    this.router.post("/", Auth.authorize, ControllerCars.create);
-    this.router.put("/:id", Auth.authorize, ControllerCars.update);
-    this.router.delete("/:id", Auth.authorize, ControllerCars.remove);
+    private router: Router;
+    constructor() {
+        this.router = Router();
+    }
+    routes() {
+        this.router.get('/', Auth.authorize, ControllerCars.list);
+        this.router.get('/:id', Auth.authorize, ControllerCars.show);
+        this.router.post('/', Auth.authorize, ControllerCars.create);
+        this.router.put('/:id', Auth.authorize, ControllerCars.update);
+        this.router.delete('/:id', Auth.authorize, ControllerCars.remove);
 
-    return this.router;
-  }
+        return this.router;
+    }
 }
 
 export default new ApiBooks();

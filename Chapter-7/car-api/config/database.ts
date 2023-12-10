@@ -1,27 +1,27 @@
-import knex, { Knex } from "knex";
+import knex, { Knex } from 'knex';
 
 class Database {
-  private static instance: Database;
-  private _db: Knex;
+    private static instance: Database;
+    private _db: Knex;
 
-  constructor() {
-    this._db = knex({
-      client: "pg",
-      connection: "postgres://postgres:afriyan@127.0.0.1:5432/db_rental_cars",
-      searchPath: ["public"],
-    });
-  }
-
-  public static getInstance(): Database {
-    if (!Database.instance) {
-      Database.instance = new Database();
+    constructor() {
+        this._db = knex({
+            client: 'pg',
+            connection: 'postgres://postgres:afriyan@127.0.0.1:5432/postgres',
+            searchPath: ['public'],
+        });
     }
-    return Database.instance;
-  }
 
-  get db(): Knex {
-    return this._db;
-  }
+    public static getInstance(): Database {
+        if (!Database.instance) {
+            Database.instance = new Database();
+        }
+        return Database.instance;
+    }
+
+    get db(): Knex {
+        return this._db;
+    }
 }
 
 export default Database.getInstance().db;

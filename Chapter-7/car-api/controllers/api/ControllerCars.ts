@@ -1,165 +1,162 @@
-import { Request, Response } from "express";
-import { IRestController } from "../../interfaces/IRest";
-import ServiceCars from "../../services/ServiceCars";
-import { IUsers } from "../../models/Users";
+import { NextFunction, Request, Response } from 'express';
+import { IRestController } from '../../interfaces/IRest';
+import ServiceCars from '../../services/ServiceCars';
+import { IUsers } from '../../models/Users';
+import { ICars } from '../../models/Cars';
+import { IRequestWithAuth } from '../../middlewares/Auth';
+import ResponseBuilder from '../../utils/ResponseBuilder';
+import media from '../../config/media';
+import { type UploadApiErrorResponse } from 'cloudinary';
 
-declare module "express" {
-  interface Request {
-    user?: IUsers;
-  }
+class ControllerCars {
+    private _serviceCars: ServiceCars;
+
+    constructor(serviceCars: ServiceCars) {
+        this._serviceCars = serviceCars;
+    }
+
+    upload() {
+        return async (req: IRequestWithAuth, res: Response, next: NextFunction) => {
+            try {
+                if (req.file) {
+                    const fileBase64 = req.file.buffer.toString('base64');
+                    const file = `data:${req.file.mimetype};base64,${fileBase64}`;
+                    const resultUpload = await media.storage.uploader.upload(file, (err, result) => {
+                        if (err) {
+                            return ResponseBuilder.response({
+                                code: 403,
+                                res,
+                                data: 'failed upload to storage',
+                            });
+                        }
+                        return result;
+                    });
+
+                    return ResponseBuilder.response({
+                        code: 200,
+                        res,
+                        data: resultUpload,
+                    });
+                }
+
+                ResponseBuilder.response({
+                    code: 404,
+                    res,
+                    data: 'file not found',
+                });
+            } catch (error) {
+                ResponseBuilder.response({
+                    code: 500,
+                    data: 'upload failed',
+                    res,
+                });
+            }
+        };
+    }
+
+    create() {
+        const serviceCars = this._serviceCars;
+        return async (req: IRequestWithAuth, res: Response, next: NextFunction) => {
+            console.log(req.body);
+            try {
+                serviceCars.setUser = req.user as IUsers;
+
+                const result = await serviceCars.create(req.body as ICars);
+
+                return ResponseBuilder.response({
+                    res,
+                    code: 201,
+                    data: result,
+                    message: 'Add new car success',
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
+    }
+
+    list() {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const query = req.query;
+                const result = await this._serviceCars.list(query);
+                const totalPages = Math.floor(result.total / Number(query?.size ?? 10)) + 1;
+
+                return ResponseBuilder.response({
+                    res,
+                    code: 200,
+                    data: result.results,
+                    message: 'Get cars data success',
+                    meta: {
+                        page: query?.page ? Number(query?.page) : 1,
+                        size: query?.size ? Number(query?.size) : 10,
+                        totalData: result.total,
+                        totalPages,
+                    },
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
+    }
+
+    show() {
+        return async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const id = req.params?.id;
+                const result = await this._serviceCars.show(id);
+
+                return ResponseBuilder.response({
+                    res,
+                    code: 200,
+                    data: result,
+                    message: 'Get car data success',
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
+    }
+
+    update() {
+        const serviceCars = this._serviceCars;
+        return async (req: IRequestWithAuth, res: Response, next: NextFunction) => {
+            try {
+                const id = req.params?.id;
+                serviceCars.setUser = req.user as IUsers;
+
+                const result = await serviceCars.update(id, req.body as ICars);
+                return ResponseBuilder.response({
+                    res,
+                    code: 200,
+                    data: result,
+                    message: 'Update car success',
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
+    }
+
+    remove() {
+        const serviceCars = this._serviceCars;
+        return async (req: IRequestWithAuth, res: Response, next: NextFunction) => {
+            try {
+                serviceCars.setUser = req.user as IUsers;
+                const id = req.params?.id;
+                const result = await serviceCars.remove(id);
+
+                return ResponseBuilder.response({
+                    res,
+                    code: 200,
+                    data: result,
+                    message: 'Delete car success',
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
+    }
 }
 
-class ControllerCars implements IRestController {
-  constructor() {}
-  async list(req: Request, res: Response) {
-    const { available } = req.query;
-    const isAvailable = available === "true";
-
-    try {
-      const response = await ServiceCars.list({ available: isAvailable });
-      res.status(200).json({
-        meta: {
-          message: "Getting All Car",
-          code: 200,
-          success: true,
-        },
-        data: response,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        data: error,
-      });
-    }
-  }
-
-  async show(req: Request, res: Response) {
-    const id = req.params.id;
-
-    try {
-      const response = await ServiceCars.show(id);
-
-      if (response === null) {
-        res.status(401).json({
-          meta: {
-            message: "Car not found",
-            code: 401,
-            success: false,
-          },
-          data: null,
-        });
-
-        return;
-      }
-
-      res.status(200).json({
-        meta: {
-          message: "Getting Car by Id success",
-          code: 200,
-          success: true,
-        },
-        data: response,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        data: error,
-      });
-    }
-  }
-
-  async create(req: Request, res: Response) {
-    const data = req.body;
-    data.created_by = (req as Request).user?.username;
-    // console.log((req as Request).user?.username);
-    try {
-      await ServiceCars.create(data);
-
-      res.status(200).json({
-        meta: {
-          message: "Create car success",
-          code: 200,
-          success: true,
-        },
-        data,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        data: error,
-      });
-    }
-  }
-
-  async update(req: Request, res: Response) {
-    const id = req.params.id;
-    const data = req.body;
-    data.updated_by = (req as Request).user?.username;
-    data.updated_at = new Date().toISOString();
-
-    try {
-      const response = await ServiceCars.update(id, data);
-
-      if (response === 0) {
-        res.status(404).json({
-          meta: {
-            message: "Car not found",
-            code: 404,
-            success: false,
-          },
-        });
-      }
-
-      res.status(200).json({
-        meta: {
-          message: "Update car success",
-          code: 200,
-          success: true,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        data: error,
-      });
-    }
-  }
-
-  async remove(req: Request, res: Response) {
-    const id = req.params.id;
-    const deleted_by: any = (req as Request).user?.username;
-
-    console.log(deleted_by);
-
-    try {
-      const response = await ServiceCars.remove(id, deleted_by);
-
-      if (response === 0) {
-        res.status(404).json({
-          meta: {
-            message: "Car not found",
-            code: 404,
-            success: false,
-          },
-        });
-
-        return;
-      }
-
-      res.status(200).json({
-        meta: {
-          message: "Delete car success",
-          code: 200,
-          success: true,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        data: error,
-      });
-    }
-  }
-}
-
-export default new ControllerCars();
+export default ControllerCars;
